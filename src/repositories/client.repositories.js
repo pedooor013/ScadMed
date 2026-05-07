@@ -23,7 +23,7 @@ function createClientRepository(newClient){
 
 function findClientByEmailRepository(email){
         return new Promise((res, rej) =>{
-            db.run(
+            db.get(
                 `
                 SELECT 
                     id,
@@ -36,7 +36,7 @@ function findClientByEmailRepository(email){
                     email = ?
                 `,
                 [email],
-                function(err){
+                (err, row) =>{
                     if(err){
                         rej(err);
                     }else{
@@ -45,6 +45,27 @@ function findClientByEmailRepository(email){
                 }
             )
         })
+}
+
+function findClientByIdRepository(id){
+    return new Promise((res, rej) =>{
+        db.get(`
+            SELECT
+                id, name, email
+            FROM 
+                usuarios_client
+            WHERE 
+                id = ?
+            `, [id],
+            (err, row) =>{
+                if(err){
+                    rej(err);
+                }else{
+                    res(row);
+                }
+            }
+        )
+    })
 }
 
 export default {

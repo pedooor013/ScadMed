@@ -17,4 +17,16 @@ async function createClientService(newClient){
     const token = generateJWT(client.id);
     
     return token;
+};
+
+async function findClientByIdService(id){
+    const user = await clientRepository.findClientByIdRepository(id);
+    if(!user)
+        throw new Error("User not found");
+    return user;
+}
+
+export default {
+    createClientService,
+    findClientByIdService
 }
