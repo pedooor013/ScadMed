@@ -9,7 +9,7 @@ async function createClientController(req, res){
         const token = await clientService.createClientService(newClient);
         res.status(201).json({token});
     }catch(err){
-        res.status(400).send({message: "Error in create user"});
+        res.status(400).send({message: "Error in create user" });
     }
 }
 
@@ -20,11 +20,11 @@ async function loginClientController(req, res){
         const token = await loginService(email, password);
         res.status(201).json({token});
     }catch(err){
-        res.status(400).send({message: err.message});
+        res.status(400).send( { message: err.message } );
     }
 }
 
-async function findUserByIdController(req, res){
+async function findClientByIdController(req, res){
     const { id } = req.params;
 
     try{
@@ -38,5 +38,5 @@ async function findUserByIdController(req, res){
 export default {
     createClientController,
     loginClientController,
-    findUserByIdController
+    findClientByIdController
 }

@@ -4,7 +4,7 @@ import { generateJWT } from "./auth.service.js";
 
 async function createClientService(newClient){
     const findClient = await clientRepository.findClientByEmailRepository(newClient.email);
-    if(findUser) throw new Error("User already exists!");
+    if(findClient) throw new Error("User already exists!");
 
     const passHash = await bcrypt.hash(newClient.password, 10);
     const client = await clientRepository.createClientRepository({ 

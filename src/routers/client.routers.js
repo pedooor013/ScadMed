@@ -7,6 +7,6 @@ import {validate} from "../middlewares/validation.middleware.js"
 const router = Router();
 
 router.post('/register', validate(clientSchema), clientController.createClientController);
-router.post('/login', clientController.createClientController);
+router.post('/login', clientController.loginClientController);
 
 export default router;

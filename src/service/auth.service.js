@@ -4,18 +4,20 @@ import clientRepository from "../repositories/client.repositories.js"
 import bcrypt from "bcrypt";
 
 function generateJWT(id){
-    return jwt.sign({id}),
+    return jwt.sign({id},
         process.env.SECRET_JWT,
-        {experesIn: 86400};
+        {expiresIn: 86400});
 }
 
 async function loginService(email, password){
-    const client = await clientRepository.findUserByEmailRepostitory(email);
-    if(!user) throw new Error('Invalid user!');
-    const isPasswordValid = await bcrypt.compare(password, client.password);
+    const client = await clientRepository.findClientByEmailRepository(email);
+    
+    if(!client) throw new Error('Invalid user!');
+    const isPasswordValid = await bcrypt.compare(password, client.senha);
+    
     if(!isPasswordValid) throw new Error('Invalid user!');
-    const token = generateJWT(client.id);
-    return generateJWT(client.id) 
+    
+    return generateJWT(client.id);
 }
 
 

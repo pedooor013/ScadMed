@@ -1,74 +1,40 @@
-import db from "../config/supabase.js"
+import supabase from "../config/supabase.js"
 
-function createClientRepository(newClient){
-    return new Promise((res, rej) =>{
-        const {name, email, password} = newClient;
-        db.run(
-            `
-            INSERT
-                INTO usuarios_cliente(nome, email, senha)
-                VALUES (?, ?, ?)
-            `,
-            [name, email, password],
-            function(err){
-                if(err){
-                    rej(err);
-                }else{
-                    res({id: this.lastID, ...newClient})
-                }
-            }
-        )
-    })
+async function createClientRepository(newClient) {
+    const { name, email, password } = newClient;
+
+    const { data, error } = await supabase
+        .from('usuarios_cliente')
+        .insert({ nome: name, email: email, senha: password })
+        .select();
+
+    if (error) throw error;
+    return data[0];
 }
 
-function findClientByEmailRepository(email){
-        return new Promise((res, rej) =>{
-            db.get(
-                `
-                SELECT 
-                    id,
-                    nome,
-                    email,
-                    senha
-                FROM
-                    usuarios_client
-                WHERE
-                    email = ?
-                `,
-                [email],
-                (err, row) =>{
-                    if(err){
-                        rej(err);
-                    }else{
-                        res(row);
-                    }
-                }
-            )
-        })
+async function findClientByEmailRepository(email) {
+    const { data, error } = await supabase
+        .from('usuarios_cliente')
+        .select('id, nome , email, senha')
+        .eq('email', email);
+
+    if (error) throw error;
+    return data[0] || null;
 }
 
-function findClientByIdRepository(id){
-    return new Promise((res, rej) =>{
-        db.get(`
-            SELECT
-                id, name, email
-            FROM 
-                usuarios_client
-            WHERE 
-                id = ?
-            `, [id],
-            (err, row) =>{
-                if(err){
-                    rej(err);
-                }else{
-                    res(row);
-                }
-            }
-        )
-    })
+async function findClientByIdRepository(id) {
+    const { data, error } = await supabase
+        .from('usuarios_cliente')
+        .select('id, nome, email')
+        .eq('id', id)
+        .single();
+
+    if (error) throw error;
+    return data;
 }
 
 export default {
-    createClientRepository, 
-    findClientByEmailRepository
+    createClientRepository,
+    findClientByEmailRepository,
+    findClientByIdRepository 
 }
