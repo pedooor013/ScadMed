@@ -10,4 +10,4 @@ const clientIdSchema = z.object({
     clientId: z.number().int().positive("User ID must be a positive integer"),
 });
 
-export { userSchema, userIdSchema}; 
+export { clientSchema, clientIdSchema}; 
