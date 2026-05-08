@@ -6,7 +6,7 @@ async function createClientController(req, res){
     const newClient = req.body;
 
     try{
-        const token = await clientService.createClientService(newUser);
+        const token = await clientService.createClientService(newClient);
         res.status(201).json({token});
     }catch(err){
         res.status(400).send({message: "Error in create user"});
